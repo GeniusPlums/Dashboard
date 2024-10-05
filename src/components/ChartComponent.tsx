@@ -21,7 +21,6 @@ interface ChartComponentProps {
   type: 'bar' | 'pie'
   data: Record<string, number | Record<string, number>>
   options?: {
-    stacked?: boolean
     comparison?: boolean
     horizontal?: boolean
     sortDescending?: boolean
@@ -46,7 +45,7 @@ type ChartDataPoint = SimpleDataPoint | ComparisonDataPoint
 const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))', 'hsl(var(--chart-6))']
 
 export default function ChartComponent({ type, data, options = {}, title, description }: ChartComponentProps) {
-  const { stacked, comparison, horizontal, sortDescending } = options
+  const { comparison, horizontal, sortDescending } = options
 
   const prepareData = (): ChartDataPoint[] => {
     if (type === 'pie' || !comparison) {
