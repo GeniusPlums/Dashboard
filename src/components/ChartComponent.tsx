@@ -6,11 +6,13 @@ import {
   Bar,
   XAxis,
   YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell,
-  Tooltip
+  Cell
 } from 'recharts'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { motion } from 'framer-motion'
@@ -19,6 +21,7 @@ interface ChartComponentProps {
   type: 'bar' | 'pie'
   data: Record<string, number | Record<string, number>>
   options?: {
+    stacked?: boolean
     comparison?: boolean
     horizontal?: boolean
     sortDescending?: boolean
@@ -27,16 +30,23 @@ interface ChartComponentProps {
   description: string
 }
 
-type ChartDataPoint = {
+interface SimpleDataPoint {
   name: string
   value: number
-  [key: string]: string | number
 }
 
-const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--accent))', 'hsl(var(--muted))']
+interface ComparisonDataPoint {
+  category: string
+  subCategory: string
+  value: number
+}
+
+type ChartDataPoint = SimpleDataPoint | ComparisonDataPoint
+
+const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))', 'hsl(var(--chart-6))']
 
 export default function ChartComponent({ type, data, options = {}, title, description }: ChartComponentProps) {
-  const { comparison, horizontal, sortDescending } = options
+  const { stacked, comparison, horizontal, sortDescending } = options
 
   const prepareData = (): ChartDataPoint[] => {
     if (type === 'pie' || !comparison) {
@@ -52,11 +62,11 @@ export default function ChartComponent({ type, data, options = {}, title, descri
 
     return Object.entries(data).flatMap(([category, values]) => {
       if (typeof values === 'number') {
-        return [{ name: category, [category]: values, value: values }]
+        return [{ category, subCategory: category, value: values }]
       }
       return Object.entries(values).map(([subCategory, value]) => ({
-        name: subCategory,
-        [category]: value,
+        category,
+        subCategory,
         value: value as number
       }))
     })
@@ -67,30 +77,29 @@ export default function ChartComponent({ type, data, options = {}, title, descri
   const renderChart = () => {
     if (type === 'bar') {
       return (
-        <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={preparedData} layout={horizontal ? 'vertical' : 'horizontal'}>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart
+            data={preparedData}
+            layout={horizontal ? 'vertical' : 'horizontal'}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
             {horizontal ? (
-              <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} />
+              <YAxis dataKey={comparison ? "subCategory" : "name"} type="category" />
             ) : (
-              <XAxis dataKey="name" axisLine={false} tickLine={false} />
+              <XAxis dataKey={comparison ? "subCategory" : "name"} />
             )}
-            {horizontal ? (
-              <XAxis type="number" axisLine={false} tickLine={false} />
-            ) : (
-              <YAxis axisLine={false} tickLine={false} />
-            )}
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'hsl(var(--background))',
-                border: '1px solid hsl(var(--border))'
-              }}
-            />
+            {horizontal ? <XAxis type="number" /> : <YAxis />}
+            <Tooltip />
+            <Legend />
             {comparison ? (
-              Object.keys(preparedData[0]).filter(key => key !== 'name' && key !== 'value').map((key, index) => (
-                <Bar key={key} dataKey={key} fill={COLORS[index % COLORS.length]} radius={[4, 4, 0, 0]} />
-              ))
+              <>
+                <Bar dataKey="value" fill={COLORS[0]} name={(preparedData[0] as ComparisonDataPoint).category} />
+                {preparedData.length > 1 && (
+                  <Bar dataKey="value" fill={COLORS[1]} name={(preparedData[1] as ComparisonDataPoint).category} />
+                )}
+              </>
             ) : (
-              <Bar dataKey="value" fill={COLORS[0]} radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill={COLORS[0]} />
             )}
           </BarChart>
         </ResponsiveContainer>
@@ -99,27 +108,24 @@ export default function ChartComponent({ type, data, options = {}, title, descri
 
     if (type === 'pie') {
       return (
-        <ResponsiveContainer width="100%" height={350}>
+        <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
-              data={preparedData}
+              data={preparedData as SimpleDataPoint[]}
               cx="50%"
               cy="50%"
               labelLine={false}
               outerRadius={80}
               fill={COLORS[0]}
               dataKey="value"
+              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
             >
               {preparedData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'hsl(var(--background))',
-                border: '1px solid hsl(var(--border))'
-              }}
-            />
+            <Tooltip />
+            <Legend />
           </PieChart>
         </ResponsiveContainer>
       )
