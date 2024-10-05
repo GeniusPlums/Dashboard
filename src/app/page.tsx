@@ -1,114 +1,237 @@
 "use client"
 
-import React from 'react'
-import { motion } from 'framer-motion'
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Overview } from "@/components/overview"
+import { RecentSales } from "@/components/recent-sales"
+import ChartComponent from '@/components/ChartComponent'
 
-interface DashboardCardProps {
-  title: string
-  value: string | number
-  description: string
-}
+export default function DashboardPage() {
+  const messageStats = {
+    email: { sent: 10000, opened: 8500 },
+    whatsapp: { sent: 5000, opened: 4800 },
+  };
 
-const DashboardCard: React.FC<DashboardCardProps> = ({ title, value, description }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-  >
-    <Card className="bg-primary text-primary-foreground">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-3xl font-bold mb-2">{value}</p>
-        <CardDescription className="text-primary-foreground/70">{description}</CardDescription>
-      </CardContent>
-    </Card>
-  </motion.div>
-)
+  const trafficSources = {
+    YouTube: 3000,
+    Instagram: 2500,
+    'Organic Website': 4000,
+  };
 
-export default function Component() {
+  const messageTemplates = {
+    'Template A': 85,
+    'Template B': 92,
+    'Template C': 78,
+    'Template D': 88,
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8 bg-background text-foreground">
-      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
-      
-      <h2 className="text-2xl font-semibold mb-4">Engagement and Automation</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <DashboardCard 
-          title="Personalized Campaigns" 
-          value={12} 
-          description="Active targeted campaigns based on user behavior"
+    <>
+      <div className="md:hidden">
+        <img
+          src="/examples/dashboard-light.png"
+          width={1280}
+          height={866}
+          alt="Dashboard"
+          className="block dark:hidden"
         />
-        <DashboardCard 
-          title="Automated Workflows" 
-          value={8} 
-          description="Workflows triggered by specific events"
-        />
-        <DashboardCard 
-          title="A/B Tests" 
-          value={5} 
-          description="Ongoing A/B tests for campaign optimization"
+        <img
+          src="/examples/dashboard-dark.png"
+          width={1280}
+          height={866}
+          alt="Dashboard"
+          className="hidden dark:block"
         />
       </div>
-
-      <h2 className="text-2xl font-semibold mb-4">Analytics and Insights</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <DashboardCard 
-          title="Active Users" 
-          value="15,234" 
-          description="Users active in the last 30 days"
-        />
-        <DashboardCard 
-          title="Audience Segments" 
-          value={18} 
-          description="Distinct audience segments for targeting"
-        />
-        <DashboardCard 
-          title="Churn Risk" 
-          value="3.2%" 
-          description="Predicted churn rate for next month"
-        />
+      <div className="hidden flex-col md:flex">
+        <div className="flex-1 space-y-4 p-8 pt-6">
+          <div className="flex items-center justify-between space-y-2">
+            <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+            <div className="flex items-center space-x-2">
+              <div className="bg-primary text-primary-foreground p-2 rounded">Engagement</div>
+            </div>
+          </div>
+          <Tabs defaultValue="overview" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="reports">Reports</TabsTrigger>
+              <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            </TabsList>
+            <TabsContent value="overview" className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Total Revenue
+                    </CardTitle>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      className="h-4 w-4 text-muted-foreground"
+                    >
+                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">$45,231.89</div>
+                    <p className="text-xs text-muted-foreground">
+                      +20.1% from last month
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Subscriptions
+                    </CardTitle>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      className="h-4 w-4 text-muted-foreground"
+                    >
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">+2350</div>
+                    <p className="text-xs text-muted-foreground">
+                      +180.1% from last month
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Sales</CardTitle>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      className="h-4 w-4 text-muted-foreground"
+                    >
+                      <rect width="20" height="14" x="2" y="5" rx="2" />
+                      <path d="M2 10h20" />
+                    </svg>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">+12,234</div>
+                    <p className="text-xs text-muted-foreground">
+                      +19% from last month
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Active Now
+                    </CardTitle>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      className="h-4 w-4 text-muted-foreground"
+                    >
+                      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                    </svg>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">+573</div>
+                    <p className="text-xs text-muted-foreground">
+                      +201 since last hour
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-4">
+                  <CardHeader>
+                    <CardTitle>Overview</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pl-2">
+                    <Overview />
+                  </CardContent>
+                </Card>
+                <Card className="col-span-3">
+                  <CardHeader>
+                    <CardTitle>Recent Sales</CardTitle>
+                    <CardDescription>
+                      You made 265 sales this month.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <RecentSales />
+                  </CardContent>
+                </Card>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-4">
+                  <CardHeader>
+                    <CardTitle>Message Performance</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartComponent
+                      type="bar"
+                      data={messageStats}
+                      options={{ comparison: true }}
+                      title="Email vs WhatsApp Performance"
+                      description="Comparison of sent and opened messages for Email and WhatsApp"
+                    />
+                  </CardContent>
+                </Card>
+                <Card className="col-span-3">
+                  <CardHeader>
+                    <CardTitle>Traffic Sources</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartComponent
+                      type="pie"
+                      data={trafficSources}
+                      title="Traffic Sources"
+                      description="Distribution of traffic from different sources"
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-4">
+                  <CardHeader>
+                    <CardTitle>Message Template Performance</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartComponent
+                      type="bar"
+                      data={messageTemplates}
+                      options={{ horizontal: true, sortDescending: true }}
+                      title="Template Performance Comparison"
+                      description="Performance comparison of different message templates"
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
-
-      <h2 className="text-2xl font-semibold mb-4">Channels and Integrations</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <DashboardCard 
-          title="Active Channels" 
-          value={5} 
-          description="Email, Push, SMS, In-app, Web Push"
-        />
-        <DashboardCard 
-          title="Integrations" 
-          value={12} 
-          description="Connected third-party tools and platforms"
-        />
-        <DashboardCard 
-          title="Message Delivery Rate" 
-          value="99.7%" 
-          description="Successful message delivery across all channels"
-        />
-      </div>
-
-      <h2 className="text-2xl font-semibold mb-4">Customer Support and Experience</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <DashboardCard 
-          title="Live Chat Sessions" 
-          value={342} 
-          description="Active live chat sessions today"
-        />
-        <DashboardCard 
-          title="Self-Service Usage" 
-          value="78%" 
-          description="Customers using self-service portal"
-        />
-        <DashboardCard 
-          title="Customer Feedback" 
-          value={4.7} 
-          description="Average rating out of 5 stars"
-        />
-      </div>
-    </div>
+    </>
   )
 }
