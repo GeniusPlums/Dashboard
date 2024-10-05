@@ -1,101 +1,114 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import React from 'react'
+import { motion } from 'framer-motion'
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+
+interface DashboardCardProps {
+  title: string
+  value: string | number
+  description: string
+}
+
+const DashboardCard: React.FC<DashboardCardProps> = ({ title, value, description }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+  >
+    <Card className="bg-primary text-primary-foreground">
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-3xl font-bold mb-2">{value}</p>
+        <CardDescription className="text-primary-foreground/70">{description}</CardDescription>
+      </CardContent>
+    </Card>
+  </motion.div>
+)
+
+export default function Component() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <div className="container mx-auto px-4 py-8 bg-background text-foreground">
+      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+      
+      <h2 className="text-2xl font-semibold mb-4">Engagement and Automation</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <DashboardCard 
+          title="Personalized Campaigns" 
+          value={12} 
+          description="Active targeted campaigns based on user behavior"
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+        <DashboardCard 
+          title="Automated Workflows" 
+          value={8} 
+          description="Workflows triggered by specific events"
+        />
+        <DashboardCard 
+          title="A/B Tests" 
+          value={5} 
+          description="Ongoing A/B tests for campaign optimization"
+        />
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <h2 className="text-2xl font-semibold mb-4">Analytics and Insights</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <DashboardCard 
+          title="Active Users" 
+          value="15,234" 
+          description="Users active in the last 30 days"
+        />
+        <DashboardCard 
+          title="Audience Segments" 
+          value={18} 
+          description="Distinct audience segments for targeting"
+        />
+        <DashboardCard 
+          title="Churn Risk" 
+          value="3.2%" 
+          description="Predicted churn rate for next month"
+        />
+      </div>
+
+      <h2 className="text-2xl font-semibold mb-4">Channels and Integrations</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <DashboardCard 
+          title="Active Channels" 
+          value={5} 
+          description="Email, Push, SMS, In-app, Web Push"
+        />
+        <DashboardCard 
+          title="Integrations" 
+          value={12} 
+          description="Connected third-party tools and platforms"
+        />
+        <DashboardCard 
+          title="Message Delivery Rate" 
+          value="99.7%" 
+          description="Successful message delivery across all channels"
+        />
+      </div>
+
+      <h2 className="text-2xl font-semibold mb-4">Customer Support and Experience</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <DashboardCard 
+          title="Live Chat Sessions" 
+          value={342} 
+          description="Active live chat sessions today"
+        />
+        <DashboardCard 
+          title="Self-Service Usage" 
+          value="78%" 
+          description="Customers using self-service portal"
+        />
+        <DashboardCard 
+          title="Customer Feedback" 
+          value={4.7} 
+          description="Average rating out of 5 stars"
+        />
+      </div>
     </div>
-  );
+  )
 }
