@@ -1,237 +1,219 @@
 "use client"
 
+import { useState, useEffect } from "react"
+import { Bar, BarChart, Line, LineChart, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts"
+import { Bell, MessageSquare, Users, Zap } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Overview } from "@/components/overview"
-import { RecentSales } from "@/components/recent-sales"
-import ChartComponent from '@/components/ChartComponent'
+import { TabsContent } from "@/components/ui/tabs"
 
-export default function DashboardPage() {
-  const messageStats = {
-    email: { sent: 10000, opened: 8500 },
-    whatsapp: { sent: 5000, opened: 4800 },
-  };
+export default function Component() {
+  const [mounted, setMounted] = useState(false)
 
-  const trafficSources = {
-    YouTube: 3000,
-    Instagram: 2500,
-    'Organic Website': 4000,
-  };
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-  const messageTemplates = {
-    'Template A': 85,
-    'Template B': 92,
-    'Template C': 78,
-    'Template D': 88,
-  };
+  // Dummy data for charts
+  const campaignData = [
+    { name: "Email", value: 400 },
+    { name: "SMS", value: 300 },
+    { name: "Push", value: 200 },
+    { name: "In-App", value: 100 },
+  ]
+
+  const engagementData = [
+    { name: "Mon", value: 4000 },
+    { name: "Tue", value: 3000 },
+    { name: "Wed", value: 5000 },
+    { name: "Thu", value: 2780 },
+    { name: "Fri", value: 1890 },
+    { name: "Sat", value: 2390 },
+    { name: "Sun", value: 3490 },
+  ]
+
+  const abTestData = [
+    { name: "A", opens: 4000, clicks: 2400 },
+    { name: "B", opens: 3000, clicks: 1398 },
+  ]
+
+  const COLORS = ['#FFFF00', '#FFD700', '#FFA500', '#FF8C00']
+
+  if (!mounted) return null
 
   return (
-    <>
-      <div className="md:hidden">
-        <img
-          src="/examples/dashboard-light.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="block dark:hidden"
-        />
-        <img
-          src="/examples/dashboard-dark.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="hidden dark:block"
-        />
-      </div>
-      <div className="hidden flex-col md:flex">
-        <div className="flex-1 space-y-4 p-8 pt-6">
-          <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-            <div className="flex items-center space-x-2">
-              <div className="bg-primary text-primary-foreground p-2 rounded">Engagement</div>
-            </div>
-          </div>
-          <Tabs defaultValue="overview" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="reports">Reports</TabsTrigger>
-              <TabsTrigger value="notifications">Notifications</TabsTrigger>
-            </TabsList>
-            <TabsContent value="overview" className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total Revenue
-                    </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                    </svg>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">$45,231.89</div>
-                    <p className="text-xs text-muted-foreground">
-                      +20.1% from last month
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Subscriptions
-                    </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+2350</div>
-                    <p className="text-xs text-muted-foreground">
-                      +180.1% from last month
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Sales</CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <rect width="20" height="14" x="2" y="5" rx="2" />
-                      <path d="M2 10h20" />
-                    </svg>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+12,234</div>
-                    <p className="text-xs text-muted-foreground">
-                      +19% from last month
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Active Now
-                    </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                    </svg>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
-                    <p className="text-xs text-muted-foreground">
-                      +201 since last hour
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                  <CardHeader>
-                    <CardTitle>Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pl-2">
-                    <Overview />
-                  </CardContent>
-                </Card>
-                <Card className="col-span-3">
-                  <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
-                    <CardDescription>
-                      You made 265 sales this month.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <RecentSales />
-                  </CardContent>
-                </Card>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                  <CardHeader>
-                    <CardTitle>Message Performance</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ChartComponent
-                      type="bar"
-                      data={messageStats}
-                      options={{ comparison: true }}
-                      title="Email vs WhatsApp Performance"
-                      description="Comparison of sent and opened messages for Email and WhatsApp"
-                    />
-                  </CardContent>
-                </Card>
-                <Card className="col-span-3">
-                  <CardHeader>
-                    <CardTitle>Traffic Sources</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ChartComponent
-                      type="pie"
-                      data={trafficSources}
-                      title="Traffic Sources"
-                      description="Distribution of traffic from different sources"
-                    />
-                  </CardContent>
-                </Card>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                  <CardHeader>
-                    <CardTitle>Message Template Performance</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ChartComponent
-                      type="bar"
-                      data={messageTemplates}
-                      options={{ horizontal: true, sortDescending: true }}
-                      title="Template Performance Comparison"
-                      description="Performance comparison of different message templates"
-                    />
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-          </Tabs>
+    <div className="flex flex-col h-screen">
+      <header className="flex items-center h-16 px-4 border-b bg-gray-900 border-gray-800">
+        <h1 className="text-lg font-bold text-yellow-400">Marketing Dashboard</h1>
+        <nav className="ml-auto flex gap-4">
+          <Button variant="ghost" className="text-yellow-400">
+            Dashboard
+          </Button>
+          <Button variant="ghost" className="text-yellow-400">
+            Campaigns
+          </Button>
+          <Button variant="ghost" className="text-yellow-400">
+            Analytics
+          </Button>
+          <Button variant="ghost" className="text-yellow-400">
+            Support
+          </Button>
+        </nav>
+      </header>
+      <main className="flex-1 overflow-y-auto p-4 bg-black">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Card className="bg-gray-900 border-gray-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-yellow-400">Total Customers</CardTitle>
+              <Users className="h-4 w-4 text-yellow-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-yellow-400">10,482</div>
+              <p className="text-xs text-yellow-200">+20.1% from last month</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-gray-900 border-gray-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-yellow-400">Active Campaigns</CardTitle>
+              <Zap className="h-4 w-4 text-yellow-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-yellow-400">7</div>
+              <p className="text-xs text-yellow-200">+2 new this week</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-gray-900 border-gray-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-yellow-400">Engagement Rate</CardTitle>
+              <Bell className="h-4 w-4 text-yellow-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-yellow-400">24.8%</div>
+              <p className="text-xs text-yellow-200">+5.2% from last week</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-gray-900 border-gray-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-yellow-400">Support Tickets</CardTitle>
+              <MessageSquare className="h-4 w-4 text-yellow-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-yellow-400">42</div>
+              <p className="text-xs text-yellow-200">-18% from last month</p>
+            </CardContent>
+          </Card>
         </div>
-      </div>
-    </>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
+          <Card className="col-span-4 bg-gray-900 border-gray-800">
+            <CardHeader>
+              <CardTitle className="text-yellow-400">Call To Action</CardTitle>
+            </CardHeader>
+            <CardContent className="pl-2">
+              <div className="h-[200px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={engagementData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+                    <XAxis dataKey="name" stroke="#FFFF00" />
+                    <YAxis stroke="#FFFF00" />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: '#333', border: '1px solid #FFFF00' }}
+                      labelStyle={{ color: '#FFFF00' }}
+                    />
+                    <Line type="monotone" dataKey="value" stroke="#FFFF00" strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="col-span-3 bg-gray-900 border-gray-800">
+            <CardHeader>
+              <CardTitle className="text-yellow-400">Channel Distribution</CardTitle>
+              <CardDescription className="text-yellow-200">Active campaigns by channel</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[200px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={campaignData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {campaignData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{ backgroundColor: '#333', border: '1px solid #FFFF00' }}
+                      labelStyle={{ color: '#FFFF00' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
+          <Card className="col-span-4 bg-gray-900 border-gray-800">
+            <CardHeader>
+              <CardTitle className="text-yellow-400">A/B Testing Results</CardTitle>
+              <CardDescription className="text-yellow-200">Comparing open rates and click-through rates</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[200px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={abTestData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+                    <XAxis dataKey="name" stroke="#FFFF00" />
+                    <YAxis stroke="#FFFF00" />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: '#333', border: '1px solid #FFFF00' }}
+                      labelStyle={{ color: '#FFFF00' }}
+                    />
+                    <Bar dataKey="opens" fill="#FFFF00" />
+                    <Bar dataKey="clicks" fill="#FFD700" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="col-span-3 bg-gray-900 border-gray-800">
+            <CardHeader>
+              <CardTitle className="text-yellow-400">Recent Activities</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center">
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none text-yellow-400">New campaign created</p>
+                    <p className="text-sm text-yellow-200">Summer Sale Email Campaign</p>
+                  </div>
+                  <div className="ml-auto font-medium text-yellow-400">Just now</div>
+                </div>
+                <div className="flex items-center">
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none text-yellow-400">A/B Test completed</p>
+                    <p className="text-sm text-yellow-200">Subject Line Test for Newsletter</p>
+                  </div>
+                  <div className="ml-auto font-medium text-yellow-400">2 hours ago</div>
+                </div>
+                <div className="flex items-center">
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none text-yellow-400">Segment updated</p>
+                    <p className="text-sm text-yellow-200">High-Value Customers</p>
+                  </div>
+                  <div className="ml-auto font-medium text-yellow-400">5 hours ago</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+    </div>
   )
 }
