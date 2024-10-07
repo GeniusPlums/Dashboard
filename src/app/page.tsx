@@ -6,7 +6,6 @@ import { Bell, MessageSquare, Users, Zap } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { TabsContent } from "@/components/ui/tabs"
 
 export default function Component() {
   const [mounted, setMounted] = useState(false)
